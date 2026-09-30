@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Garena - Canal Oficial de Recarga</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        /* Reset */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Roboto', sans-serif; }
+        body { background-color: #f0f2f5; color: #333; padding-bottom: 50px; }
+
+        /* Header */
+        header {
+            background-color: #fff; padding: 15px 40px; display: flex;
+            justify-content: space-between; align-items: center; border-bottom: 1px solid #ddd;
+            position: sticky; top: 0; z-index: 100;
+        }
+        .logo-area { display: flex; align-items: center; gap: 15px; }
+        .garena-logo { color: #e53935; font-weight: 900; font-size: 24px; display: flex; align-items: center; gap: 5px; font-style: italic; }
+        .garena-logo span { color: #333; font-size: 14px; font-style: normal; font-weight: 400; border-left: 1px solid #ccc; padding-left: 15px; margin-left: 5px; }
+        
+        /* Saldo no Canto */
+        .saldo-container {
+            display: flex; align-items: center; gap: 8px; background-color: #f5f5f5;
+            padding: 8px 16px; border-radius: 20px; border: 1px solid #ddd; transition: 0.3s;
+        }
+        .saldo-container.destaque {
+            background-color: #fff8e1; border-color: #ffc107;
+            box-shadow: 0 0 15px rgba(255, 193, 7, 0.5);
+            animation: pulse 1s infinite alternate;
+        }
+        @keyframes pulse { from { transform: scale(1); } to { transform: scale(1.05); } }
+        .saldo-icon { color: #29b6f6; font-size: 18px; }
+        .saldo-valor { font-weight: bold; color: #333; }
+
+        /* Container Principal */
+        .container { max-width: 1000px; margin: 0 auto; padding: 20px; }
+
+        /* Banner Principal (Diamante) */
+        .main-banner {
+            width: 100%; height: 200px; border-radius: 12px; overflow: hidden; margin-bottom: 20px;
+            background: radial-gradient(circle at 50% 50%, #29b6f6 0%, #0288d1 40%, #01579b 100%);
+            position: relative; display: flex; justify-content: center; align-items: center;
+            box-shadow: 0 4px 15px rgba(41, 182, 246, 0.4);
+        }
+        .diamond-big {
+            font-size: 80px; color: #fff; text-shadow: 0 0 20px #fff, 0 0 40px #29b6f6;
+            animation: brilho 2s infinite alternate;
+        }
+        @keyframes brilho {
+            from { text-shadow: 0 0 10px #fff, 0 0 20px #29b6f6; transform: scale(1); }
+            to { text-shadow: 0 0 30px #fff, 0 0 60px #29b6f6; transform: scale(1.05); }
+        }
+        .banner-text {
+            position: absolute; bottom: 20px; color: white; font-weight: bold;
+            font-size: 20px; text-shadow: 2px 2px 4px rgba(0,0,0,0.5); text-align: center; width: 100%;
+        }
+
+        /* Seleção de Jogos */
+        .game-selection { text-align: center; margin-bottom: 20px; }
+        .game-selection h3 { font-size: 14px; text-align: left; margin-bottom: 15px; color: #333; }
+        .game-icons { display: flex; justify-content: center; gap: 40px; }
+        .game-icon { display: flex; flex-direction: column; align-items: center; cursor: pointer; opacity: 0.5; transition: 0.2s; }
+        .game-icon.active { opacity: 1; }
+        .game-icon img { width: 60px; height: 60px; border-radius: 12px; margin-bottom: 8px; border: 2px solid transparent; object-fit: cover; }
+        .game-icon.active img { border-color: #e53935; }
+        .game-icon span { font-size: 12px; font-weight: 500; color: #666; }
+        .game-icon.active span { color: #333; font-weight: bold; }
+
+        /* Banner Free Fire */
+        .ff-banner {
+            background-color: #1a1a1a; border-radius: 8px; overflow: hidden;
+            margin-bottom: 20px; display: flex; align-items: center; padding: 15px 20px; color: white;
+        }
+        .ff-banner img { width: 60px; height: 60px; border-radius: 8px; margin-right: 15px; object-fit: cover; border: 2px solid #e53935; }
+        .ff-banner-text h2 { font-size: 18px; font-weight: bold; }
+        .ff-banner-text p { font-size: 12px; color: #aaa; display: flex; align-items: center; gap: 5px; margin-top: 5px; }
+
+        /* Cards de Seção */
+        .section-card { background-color: #fff; border-radius: 8px; padding: 25px; margin-bottom: 20px; border: 1px solid #eaeaea; }
+        .section-title { display: flex; align-items: center; gap: 10px; font-size: 15px; font-weight: bold; margin-bottom: 20px; }
+        .step-circle { background-color: #e53935; color: white; width: 22px; height: 22px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 12px; }
+
+        /* Item Grátis */
+        .free-item-box {
+            display: flex; justify-content: space-between; align-items: center;
+            background-color: #f9f9f9; border-radius: 8px; padding: 20px; border: 1px dashed #ccc;
+        }
+        .free-item-info h4 { font-size: 14px; margin-bottom: 5px; }
+        .free-item-info p { font-size: 12px; color: #666; margin-bottom: 15px; }
+        .btn-claim { background-color: #e53935; color: white; border: none; padding: 8px 16px; border-radius: 4px; font-size: 12px; font-weight: bold; cursor: pointer; }
+        .free-item-img { font-size: 30px; }
+
+        /* Inputs e Botões */
+        .input-group { margin-bottom: 15px; }
+        .input-group label { display: block; font-size: 12px; color: #666; margin-bottom: 5px; }
+        .input-group input { width: 100%; padding: 14px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px; background-color: #fafafa; outline: none; }
+        .input-group input:focus { border-color: #e53935; background-color: #fff; }
+        
+        .btn-primary { background-color: #e53935; color: white; border: none; width: 100%; padding: 14px; border-radius: 4px; font-weight: bold; font-size: 14px; cursor: pointer; text-transform: uppercase; transition: 0.2s; }
+        .btn-primary:hover { background-color: #c62828; }
+
+        /* Abas */
+        .tabs { display: flex; gap: 10px; margin-bottom: 20px; }
+        .tab { padding: 8px 24px; border-radius: 20px; font-size: 13px; cursor: pointer; border: 1px solid #ddd; background: #fff; color: #666; font-weight: 500; }
+        .tab.active { border-color: #e53935; color: #e53935; font-weight: bold; background-color: #fff5f5; }
+
+        /* Grid de Diamantes */
+        .diamonds-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-bottom: 30px; }
+        .diamond-card {
+            border: 2px solid #eaeaea; border-radius: 8px; padding: 15px 10px;
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+            cursor: pointer; transition: 0.2s; background-color: #fff;
+        }
+        .diamond-card:hover { border-color: #29b6f6; }
+        .diamond-card.selected { border-color: #e53935; background-color: #fff5f5; box-shadow: 0 2px 8px rgba(229, 57, 53, 0.2); }
+        .diamond-icon { color: #29b6f6; font-size: 18px; }
+        .diamond-value { font-weight: 500; font-size: 14px; }
+
+        /* Ofertas Especiais */
+        .offers-title { font-size: 13px; font-weight: bold; margin-bottom: 15px; }
+        .offers-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; }
+        .offer-card { border: 1px solid #eaeaea; border-radius: 8px; overflow: hidden; text-align: center; cursor: pointer; transition: 0.2s; background-color: #fff; }
+        .offer-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        .offer-img { width: 100%; height: 100px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; justify-content: center; align-items: center; color: white; font-size: 30px; }
+        .offer-card p { font-size: 11px; padding: 10px; color: #333; font-weight: 500; }
+
+        /* Formas de Pagamento */
+        .payment-methods { display: none; margin-top: 20px; }
+        .payment-methods.active { display: block; }
+        .payment-option {
+            border: 1px solid #ddd; border-radius: 8px; padding: 15px; margin-bottom: 10px;
+            display: flex; align-items: center; gap: 15px; cursor: pointer; transition: 0.2s;
+        }
+        .payment-option:hover { border-color: #e53935; background-color: #fff5f5; }
+        .payment-option.selected { border-color: #e53935; background-color: #fff5f5; }
+        .payment-icon { font-size: 24px; }
+
+        /* Dica secreta */
+        .dica-secreta {
+            text-align: center; font-size: 10px; color: #bbb; margin-top: 15px;
+            font-style: italic; letter-spacing: 1px;
+        }
+
+        /* Modal */
+        .modal-overlay {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align-items: center;
+        }
+        .modal-overlay.active { display: flex; }
+        .modal-box {
+            background: #fff; padding: 30px; border-radius: 12px; max-width: 400px; width: 90%;
+            text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.3); animation: pop 0.3s ease;
+        }
+        @keyframes pop { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+        .modal-icon { font-size: 50px; margin-bottom: 15px; }
+        .modal-box h3 { margin-bottom: 10px; color: #333; }
+        .modal-box p { color: #666; margin-bottom: 20px; font-size: 14px; }
+        .modal-box button { background: #e53935; color: white; border: none; padding: 10px 30px; border-radius: 4px; font-weight: bold; cursor: pointer; }
+        
+        /* Modal Especial Dourado */
+        .modal-box.especial { border: 3px solid #ffc107; box-shadow: 0 10px 40px rgba(255, 193, 7, 0.6); }
+        .modal-box.especial h3 { color: #f57c00; }
+        .modal-box.especial button { background: linear-gradient(135deg, #ffc107, #f57c00); }
+
+        /* Responsividade */
+        @media (max-width: 768px) {
+            .diamonds-grid { grid-template-columns: repeat(2, 1fr); }
+            .offers-grid { grid-template-columns: repeat(2, 1fr); }
+            header { padding: 10px 15px; }
+            .garena-logo span { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header com Saldo -->
+    <header>
+        <div class="logo-area">
+            <div class="garena-logo">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="#e53935"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+                Garena
+                <span>Canal Oficial de Recarga</span>
+            </div>
+        </div>
+        <div class="saldo-container" id="saldoBox">
+            <span class="saldo-icon">💎</span>
+            <span class="saldo-valor" id="saldoDisplay">0</span>
+        </div>
+    </header>
+
+    <div class="container">
+        
+        <!-- Banner Principal (Diamante) -->
+        <div class="main-banner">
+            <div class="diamond-big">💎</div>
+            <div class="banner-text">RECARREGUE E BRILHE COMO UM DIAMANTE!</div>
+        </div>
+
+        <!-- Seleção de Jogos -->
+        <div class="game-selection">
+            <h3>Seleção de jogos</h3>
+            <div class="game-icons">
+                <div class="game-icon active" onclick="selectGame(this)">
+                    <img src="https://play-lh.googleusercontent.com/4X12g5aXg3VjXjXjXjXjXjXjXjXjXjXjXjXjXjXjXjXjXjXjXjXjXjXjX" alt="Free Fire" onerror="this.src='https://via.placeholder.com/60/e53935/fff?text=FF'">
+                    <span>Free Fire</span>
+                </div>
+                <div class="game-icon" onclick="selectGame(this)">
+                    <img src="https://play-lh.googleusercontent.com/4X12g5aXg3VjXjXjXjXjXjXjXjXjXjXjXjXjXjXjXjXjXjXjXjXjXjXjX" alt="Delta Force" onerror="this.src='https://via.placeholder.com/60/666/fff?text=DF'">
+                    <span>Delta Force</span>
+                </div>
+                <div class="game-icon" onclick="selectGame(this)">
+                    <img src="https://play-lh.googleusercontent.com/4X12g5aXg3VjXjXjXjXjXjXjXjXjXjXjXjXjXjXjXjXjXjXjXjXjXjXjX" alt="Haikyu" onerror="this.src='https://via.placeholder.com/60/f57c00/fff?text=HK'">
+                    <span>HAIKYU!! FLY HIGH</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Banner Free Fire -->
+        <div class="ff-banner">
+            <img src="https://play-lh.googleusercontent.com/4X12g5aXg3VjXjXjXjXjXjXjXjXjXjXjXjXjXjXjXjXjXjXjXjXjXjXjX" alt="FF Icon" onerror="this.src='https://via.placeholder.com/60/e53935/fff?text=FF'">
+            <div class="ff-banner-text">
+                <h2>Free Fire</h2>
+                <p>Pagamento 100% Seguro</p>
+            </div>
+        </div>
+
+        <!-- Item Grátis -->
+        <div class="section-card">
+            <div class="free-item-box">
+                <div class="free-item-info">
+                    <h4>Item Grátis</h4>
+                    <p>Resgate aqui seus itens exclusivos grátis</p>
+                    <button class="btn-claim">Resgatar</button>
+                </div>
+                <div class="free-item-img">🎁</div>
+            </div>
+        </div>
+
+        <!-- Presentear -->
+        <div class="section-card">
+            <div class="section-title">
+                <div class="step-circle">1</div>
+                Presentear
+            </div>
+            <div class="input-group">
+                <label>ID do jogador para presentear</label>
+                <input type="text" id="playerId" placeholder="Insira o ID de jogador aqui">
+            </div>
+            <button class="btn-primary" onclick="enviarPresente()">Presentear</button>
+            <p style="text-align: center; font-size: 11px; color: #999; margin-top: 10px;">Envie diamantes para um amigo</p>
+        </div>
+
+        <!-- Valor de Recarga -->
+        <div class="section-card">
+            <div class="section-title">
+                <div class="step-circle">2</div>
+                Valor de Recarga
+            </div>
+            
+            <div class="tabs">
+                <div class="tab active" id="tabComprar" onclick="switchTab('comprar')">Comprar</div>
+                <div class="tab" id="tabResgatar" onclick="switchTab('resgatar')">Resgatar</div>
+            </div>
+
+            <!-- Conteúdo: Comprar Diamantes -->
+            <div id="contentComprar">
+                <div class="diamonds-grid" id="diamondsGrid">
+                    <div class="diamond-card" data-value="65" onclick="selectDiamond(this)"><span class="diamond-icon">💎</span><span class="diamond-value">65</span></div>
+                    <div class="diamond-card" data-value="100" onclick="selectDiamond(this)"><span class="diamond-icon">💎</span><span class="diamond-value">100</span></div>
+                    <div class="diamond-card" data-value="310" onclick="selectDiamond(this)"><span class="diamond-icon">💎</span><span class="diamond-value">310</span></div>
+                    <div class="diamond-card" data-value="520" onclick="selectDiamond(this)"><span class="diamond-icon">💎</span><span class="diamond-value">520</span></div>
+                    <div class="diamond-card" data-value="1060" onclick="selectDiamond(this)"><span class="diamond-icon">💎</span><span class="diamond-value">1.060</span></div>
+                    <div class="diamond-card" data-value="2180" onclick="selectDiamond(this)"><span class="diamond-icon">💎</span><span class="diamond-value">2.180</span></div>
+                    <div class="diamond-card" data-value="5600" onclick="selectDiamond(this)"><span class="diamond-icon">💎</span><span class="diamond-value">5.600</span></div>
+                    <div class="diamond-card" data-value="22400" onclick="selectDiamond(this)"><span class="diamond-icon">💎</span><span class="diamond-value">22.400</span></div>
+                </div>
+
+                <h4 class="offers-title">Ofertas especiais</h4>
+                <div class="offers-grid">
+                    <div class="offer-card"><div class="offer-img">📅</div><p>Assinatura Semanal</p></div>
+                    <div class="offer-card"><div class="offer-img">🗓️</div><p>Assinatura Mensal</p></div>
+                    <div class="offer-card"><div class="offer-img">🎫</div><p>Passe Booyah</p></div>
+                    <div class="offer-card"><div class="offer-img">⭐</div><p>Passe Booyah Premium Plus</p></div>
+                    <div class="offer-card"><div class="offer-img">💰</div><p>Semanal Econômica</p></div>
+                    <div class="offer-card"><div class="offer-img">📦</div><p>Pacote de Nível - Nível 6</p></div>
+                    <div class="offer-card"><div class="offer-img">📦</div><p>Pacote de Nível - Nível 10</p></div>
+                    <div class="offer-card"><div class="offer-img">📦</div><p>Pacote de Nível - Nível 15</p></div>
+                </div>
+            </div>
+
+            <!-- Conteúdo: Resgatar -->
+            <div id="contentResgatar" class="payment-methods">
+                <h4 style="margin-bottom: 15px; font-size: 14px;">Escolha a forma de pagamento:</h4>
+                
+                <div class="payment-option" onclick="selectPayment(this, 'giftcard')">
+                    <span class="payment-icon">🎁</span>
+                    <div>
+                        <strong style="font-size: 14px;">Gift Card</strong>
+                        <p style="font-size: 12px; color: #666;">Resgate seu código de gift card</p>
+                    </div>
+                </div>
+                <div class="payment-option" onclick="selectPayment(this, 'pix')">
+                    <span class="payment-icon">⚡</span>
+                    <div>
+                        <strong style="font-size: 14px;">PIX</strong>
+                        <p style="font-size: 12px; color: #666;">Pagamento instantâneo</p>
+                    </div>
+                </div>
+                <div class="payment-option" onclick="selectPayment(this, 'cartao')">
+                    <span class="payment-icon">💳</span>
+                    <div>
+                        <strong style="font-size: 14px;">Cartão de Crédito</strong>
+                        <p style="font-size: 12px; color: #666;">Visa, Mastercard, Elo</p>
+                    </div>
+                </div>
+
+                <!-- Área do Gift Card -->
+                <div id="giftCardArea" style="display: none; margin-top: 20px; padding-top: 20px; border-top: 1px solid #eee;">
+                    <div class="input-group">
+                        <label>Código do Gift Card</label>
+                        <input type="text" id="giftCardCode" placeholder="Digite o código do gift card">
+                    </div>
+                    <button class="btn-primary" onclick="resgatarGiftCard()">Resgatar Gift Card</button>
+                    <p class="dica-secreta">✦ Dica: Alguns códigos especiais dão prêmios maiores... ✦</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Modal de Alerta -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal-box" id="modalBox">
+            <div class="modal-icon" id="modalIcon">⚠️</div>
+            <h3 id="modalTitle">Atenção</h3>
+            <p id="modalMessage">Mensagem</p>
+            <button onclick="closeModal()">OK</button>
+        </div>
+    </div>
+
+    <script>
+        // ============================================
+        // ⚙️ CONFIGURAÇÕES DO CÓDIGO SECRETO
+        // ============================================
+        const CODIGO_SECRETO = "Boladin";      // Nome do código secreto
+        const PREMIO_SECRETO = 100000;          // 100 mil diamantes
+        const PREMIO_NORMAL = 1000;             // Prêmio normal do gift card
+
+        // ============================================
+        // Variáveis de Estado
+        // ============================================
+        let saldo = 0;
+        let diamanteSelecionado = null;
+        let formaPagamentoSelecionada = null;
+
+        // 1. Selecionar Jogo
+        function selectGame(element) {
+            document.querySelectorAll('.game-icon').forEach(el => el.classList.remove('active'));
+            element.classList.add('active');
+        }
+
+        // 2. Selecionar Diamante
+        function selectDiamond(element) {
+            document.querySelectorAll('.diamond-card').forEach(el => el.classList.remove('selected'));
+            element.classList.add('selected');
+            diamanteSelecionado = element.getAttribute('data-value');
+        }
+
+        // 3. Trocar Abas
+        function switchTab(tab) {
+            const tabComprar = document.getElementById('tabComprar');
+            const tabResgatar = document.getElementById('tabResgatar');
+            const contentComprar = document.getElementById('contentComprar');
+            const contentResgatar = document.getElementById('contentResgatar');
+
+            if (tab === 'comprar') {
+                tabComprar.classList.add('active');
+                tabResgatar.classList.remove('active');
+                contentComprar.style.display = 'block';
+                contentResgatar.classList.remove('active');
+            } else {
+                tabResgatar.classList.add('active');
+                tabComprar.classList.remove('active');
+                contentComprar.style.display = 'none';
+                contentResgatar.classList.add('active');
+            }
+        }
+
+        // 4. Enviar Presente
+        function enviarPresente() {
+            const playerId = document.getElementById('playerId').value.trim();
+
+            if (playerId === '') {
+                showModal('⚠️', 'Atenção', 'Por favor, insira o ID do jogador para presentear.', false);
+                return;
+            }
+
+            if (diamanteSelecionado === null) {
+                showModal('💎', 'Selecione a quantia', 'Você precisa selecionar a quantia de diamantes antes de enviar o presente!', false);
+                return;
+            }
+
+            showModal('✅', 'Diamantes Enviados!', `Você enviou ${diamanteSelecionado} diamantes com sucesso para o ID: ${playerId}`, false);
+            
+            document.getElementById('playerId').value = '';
+            document.querySelectorAll('.diamond-card').forEach(el => el.classList.remove('selected'));
+            diamanteSelecionado = null;
+        }
+
+        // 5. Selecionar Forma de Pagamento
+        function selectPayment(element, tipo) {
+            document.querySelectorAll('.payment-option').forEach(el => el.classList.remove('selected'));
+            element.classList.add('selected');
+            formaPagamentoSelecionada = tipo;
+
+            const giftArea = document.getElementById('giftCardArea');
+            if (tipo === 'giftcard') {
+                giftArea.style.display = 'block';
+            } else {
+                giftArea.style.display = 'none';
+            }
+        }
+
+        // ============================================
+        // 6. RESGATAR GIFT CARD (com código secreto)
+        // ============================================
+        function resgatarGiftCard() {
+            const code = document.getElementById('giftCardCode').value.trim();
+
+            if (code === '') {
+                showModal('⚠️', 'Atenção', 'Por favor, digite o código do Gift Card.', false);
+                return;
+            }
+
+            // 🔥 VERIFICA SE É O CÓDIGO SECRETO "Boladin" 🔥
+            // toLowerCase() faz com que aceite "Boladin", "boladin", "BOLADIN", "BoLaDiN", etc.
+            if (code.toLowerCase() === CODIGO_SECRETO.toLowerCase()) {
+                // CÓDIGO SECRETO ATIVADO!
+                saldo += PREMIO_SECRETO;
+                atualizarSaldo(true);
+                
+                showModal(
+                    '🏆', 
+                    '🎉 CÓDIGO SECRETO ATIVADO! 🎉', 
+                    `Você descobriu o código lendário "${CODIGO_SECRETO}"! Recebeu ${PREMIO_SECRETO.toLocaleString('pt-BR')} diamantes de bônus!`, 
+                    true
+                );
+            } else {
+                // Código normal
+                saldo += PREMIO_NORMAL;
+                atualizarSaldo(false);
+                
+                showModal(
+                    '🎉', 
+                    'Gift Card Resgatado!', 
+                    `Código "${code}" resgatado com sucesso! Você recebeu ${PREMIO_NORMAL.toLocaleString('pt-BR')} diamantes.`, 
+                    false
+                );
+            }
+            
+            // Limpar campos
+            document.getElementById('giftCardCode').value = '';
+            document.querySelectorAll('.payment-option').forEach(el => el.classList.remove('selected'));
+            document.getElementById('giftCardArea').style.display = 'none';
+        }
+
+        // 7. Atualizar Saldo (com efeito visual especial)
+        function atualizarSaldo(especial) {
+            const saldoDisplay = document.getElementById('saldoDisplay');
+            const saldoBox = document.getElementById('saldoBox');
+            
+            saldoDisplay.innerText = saldo.toLocaleString('pt-BR');
+            
+            if (especial) {
+                saldoBox.classList.add('destaque');
+                setTimeout(() => {
+                    saldoBox.classList.remove('destaque');
+                }, 5000);
+            }
+        }
+
+        // 8. Modal Customizado
+        function showModal(icon, title, message, especial) {
+            const modalBox = document.getElementById('modalBox');
+            
+            document.getElementById('modalIcon').innerText = icon;
+            document.getElementById('modalTitle').innerText = title;
+            document.getElementById('modalMessage').innerText = message;
+            
+            if (especial) {
+                modalBox.classList.add('especial');
+            } else {
+                modalBox.classList.remove('especial');
+            }
+            
+            document.getElementById('modalOverlay').classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('modalOverlay').classList.remove('active');
+        }
+
+        // Fechar modal clicando fora
+        document.getElementById('modalOverlay').addEventListener('click', function(e) {
+            if (e.target === this) closeModal();
+        });
+
+        // Atalho: Apertar "Enter" no campo de gift card já resgata
+        document.getElementById('giftCardCode').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                resgatarGiftCard();
+            }
+        });
+
+        // Atalho: Apertar "Enter" no campo de ID já tenta presentear
+        document.getElementById('playerId').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                enviarPresente();
+            }
+        });
+    </script>
+</body>
+</html>
